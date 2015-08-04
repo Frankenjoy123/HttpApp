@@ -16,4 +16,12 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"/>
 
+    <Button
+        android:id="@+id/btn_register_demo"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Register Demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

@@ -1,61 +1,52 @@
 package com.itxiaowu.httpapp;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
+import android.widget.TextView;
 
 
-public class MainActivity extends Activity {
+public class RegisterActivity extends ActionBarActivity {
+    private EditText et_name;
+    private EditText et_age;
+    private Button btn_register;
 
-    private WebView webView;
+    private TextView tv_result;
+
+    private String url="http://192.168.1.5:8080/HttpServe/MyServlet";
     private Handler handler;
-    private String url="http://api.test.yunsu.co:6088/organization/2k0r1l55i2rs5544wz5/logo-mobile";
-
-    private ImageView imageView;
-
-    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_register);
         handler=new Handler();
-        webView= (WebView) findViewById(R.id.wb_content);
-        imageView= (ImageView) findViewById(R.id.iv_content);
-        button= (Button) findViewById(R.id.btn_register_demo);
+        et_name= (EditText) findViewById(R.id.et_name);
+        et_age= (EditText) findViewById(R.id.et_age);
+        btn_register= (Button) findViewById(R.id.btn_register);
 
-//        new Thread(new HttpThread("http://www.baidu.com",webView,handler)).start();
-        webView.setVisibility(View.INVISIBLE);
-
-        HttpThread httpThread=new HttpThread(url,handler,imageView);
-        httpThread.setPicture(true);
-        new Thread(httpThread).start();
-
-        button.setOnClickListener(new View.OnClickListener() {
-
+        tv_result= (TextView) findViewById(R.id.tv_result);
+        btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,RegisterActivity.class);
-                startActivity(intent);
+                RegisterThread registerThread=new RegisterThread(url,et_name.getText().toString(),et_age.getText().toString());
+                registerThread.setHandler(handler);
+                registerThread.setTv_result(tv_result);
+                new Thread(registerThread).start();
             }
         });
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_register, menu);
         return true;
     }
 
