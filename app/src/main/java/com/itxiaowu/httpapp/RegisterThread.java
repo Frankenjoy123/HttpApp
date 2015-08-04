@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -41,7 +42,11 @@ public class RegisterThread implements Runnable{
 
     @Override
     public void run() {
+//        doGet();
+        doPost();
+    }
 
+    private void doGet(){
         try {
             url+="?name="+name+"&age="+age;
             URL httpUrl=new URL(url);
@@ -70,6 +75,36 @@ public class RegisterThread implements Runnable{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    private void doPost(){
+        try {
+            URL httpUrl=new URL(url);
+            HttpURLConnection connection= (HttpURLConnection) httpUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setReadTimeout(20000);
+            OutputStream outputStream=connection.getOutputStream();
+            String params="name="+name+"&age="+age;
+            outputStream.write(params.getBytes());
+            BufferedReader br=new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            final StringBuilder sb=new StringBuilder();
+            String str;
+            while ((str=br.readLine())!=null){
+                sb.append(str);
+            }
+            if (tv_result!=null&&handler!=null){
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_result.setText(sb.toString());
+                    }
+                });
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
