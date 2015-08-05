@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 
 public class RegisterActivity extends ActionBarActivity {
     private EditText et_name;
@@ -34,10 +37,26 @@ public class RegisterActivity extends ActionBarActivity {
         btn_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RegisterThread registerThread=new RegisterThread(url,et_name.getText().toString(),et_age.getText().toString());
-                registerThread.setHandler(handler);
-                registerThread.setTv_result(tv_result);
-                new Thread(registerThread).start();
+//                RegisterThread registerThread=new RegisterThread(url,et_name.getText().toString(),et_age.getText().toString());
+//                registerThread.setHandler(handler);
+//                registerThread.setTv_result(tv_result);
+//                new Thread(registerThread).start();
+
+
+//                try {
+//                    url+="?name="+ URLEncoder.encode(et_name.getText().toString(),"utf-8")+"&age="+et_age.getText().toString();
+//                } catch (UnsupportedEncodingException e) {
+//                e.printStackTrace();
+//            }
+//            HttpClientThread thread=new HttpClientThread(url);
+//            thread.setTv_result(tv_result);
+//            thread.setHandler(handler);
+//            new Thread(thread).start();
+
+                HttpClientThread thread=new HttpClientThread(et_name.getText().toString(),url,et_age.getText().toString());
+                thread.setTv_result(tv_result);
+                thread.setHandler(handler);
+                new Thread(thread).start();
             }
         });
     }

@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Created by thinkpad on 2015/8/4.
@@ -42,13 +44,17 @@ public class RegisterThread implements Runnable{
 
     @Override
     public void run() {
-//        doGet();
-        doPost();
+        doGet();
+//        doPost();
     }
 
     private void doGet(){
         try {
-            url+="?name="+name+"&age="+age;
+            try {
+                url+="?name="+ URLEncoder.encode(name,"utf-8")+"&age="+age;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
             URL httpUrl=new URL(url);
             HttpURLConnection connection= (HttpURLConnection) httpUrl.openConnection();
             connection.setReadTimeout(20000);
